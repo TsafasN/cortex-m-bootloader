@@ -5,12 +5,24 @@
 
 #include "main.h"
 #include "flash_layout.h"
+#include "app_header.h"
+
+#define APP_MAGIC 0xABCDEFAB
 
 UART_HandleTypeDef huart1;
 
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_USART1_UART_Init(void);
+
+__attribute__((section(".header")))const app_header_t app_header =
+{
+	.ota_flag = 0,
+	.magic = APP_MAGIC,
+	.app_size = 0,
+	.app_crc = 0,
+	.version = 0
+};
 
 /**
   * @brief  The application entry point.

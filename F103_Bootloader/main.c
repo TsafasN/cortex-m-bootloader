@@ -5,6 +5,7 @@
 
 #include "main.h"
 #include "bl_jump.h"
+#include "app_header.h"
 
 UART_HandleTypeDef huart1;
 
@@ -35,6 +36,16 @@ int main(void)
   {
 	  HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
 	  HAL_Delay(100);
+  }
+
+  if (bootloader_is_app_valid() != 0)
+  {
+	  HAL_UART_Transmit(&huart1, (uint8_t*)"Application is not valid!!\r\n", 28, 100);
+	  while (1)
+	  {
+		  HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+		  HAL_Delay(100);
+	  }
   }
 
   JumpToApplication();

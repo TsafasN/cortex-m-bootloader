@@ -6,6 +6,9 @@
 #include "main.h"
 #include "bl_jump.h"
 #include "flash_layout.h"
+#include "app_header.h"
+
+#define APP_MAGIC 0xABCDEFAB
 
 typedef void (*pFunction)(void);
 
@@ -54,4 +57,25 @@ void JumpToApplication(void)
 	/*2.Set the initial PC == Reset_Handler
 	 * Jump to application reset handler*/
 	appEntry();
+}
+
+int bootloader_is_app_valid(void)
+{
+	uint32_t HEADER_ADDR = APP_HEADER_START;
+	const app_header_t *app_header = (const app_header_t *)HEADER_ADDR;
+
+	/*1.Check magic number*/
+	if (app_header->magic != APP_MAGIC)
+	{
+		return 1;
+	}
+
+	/*2.Reset handler sanity check*/
+	reset_handler = *(uint32_t*)(APP_START_ADDR + 4);
+	if ((reset_handler & 0xFF000000) != 0x08000000)
+	{
+		return 4;
+	}
+
+	return 0; // VALID
 }
