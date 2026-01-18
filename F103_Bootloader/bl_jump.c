@@ -71,7 +71,7 @@ int bootloader_is_app_valid(void)
 	}
 
 	/*2.Reset handler sanity check*/
-	reset_handler = *(uint32_t*)(APP_START_ADDR + 4);
+	uint32_t reset_handler = *(uint32_t*)(APP_START_ADDR + 4);
 	if ((reset_handler & 0xFF000000) != 0x08000000)
 	{
 		return 4;
