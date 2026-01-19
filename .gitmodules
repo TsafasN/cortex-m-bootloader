@@ -1,0 +1,4 @@
+[submodule "docs/cortex-m-bootloader-docs"]
+	path = docs/cortex-m-bootloader-docs
+	url = ../cortex-m-bootloader-docs.git
+	branch = main
